@@ -16,6 +16,7 @@ def main():
 
 	clock = pygame.time.Clock()
 	dt = 0
+	shots = pygame.sprite.Group()
 	asteroids = pygame.sprite.Group()
 	asteroid_field = pygame.sprite.Group()
 	updatable = pygame.sprite.Group()
@@ -23,6 +24,7 @@ def main():
 	AsteroidField.containers = (updatable,)
 	Player.containers = (updatable, drawable)
 	Asteroid.containers = (asteroids, updatable, drawable)
+	Shot.containers = (shots, updatable, drawable)
 	player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT /  2)
 	asteroidfield = AsteroidField()
 	while True:
@@ -47,7 +49,17 @@ def main():
 				sys.exit()
 				pass
 
+		for asteroid in asteroids:
+			for shot in shots:
+				if asteroid.collisioncheck(shot):
+					asteroid.kill()
+					shot.kill()
+					asteroid.split()
 
+		for event in pygame.event.get():
+    			if event.type == pygame.KEYDOWN:
+        			if event.key == pygame.K_SPACE:
+            				player.shoot()
 
 
 
